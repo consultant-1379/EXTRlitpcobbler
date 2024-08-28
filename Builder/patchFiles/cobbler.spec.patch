@@ -1,0 +1,135 @@
+--- cobbler.spec	2014-02-15 10:47:15.000000000 +0000
++++ cobbler.spec.new	2020-12-16 14:17:37.966702275 +0000
+@@ -3,13 +3,15 @@
+ 
+ %define _binaries_in_noarch_packages_terminate_build 0
+ %global debug_package %{nil}
++%global packager <ericsson.rstate>
+ Summary: Boot server configurator
+-Name: cobbler
++Name: EXTRlitpcobbler_CXP9030601
+ License: GPLv2+
+ AutoReq: no
+ Version: 2.4.2
+-Release: 1%{?dist}
+-Source0: http://shenson.fedorapeople.org/cobbler/cobbler-%{version}.tar.gz
++Release: 1
++Packager: %{packager}
++Source0: EXTRlitpcobbler_CXP9030601-%{version}.tar.gz
+ Group: Applications/System
+ BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-buildroot
+ BuildArch: noarch
+@@ -17,8 +19,9 @@ Url: http://www.cobblerd.org/
+ 
+ BuildRequires: redhat-rpm-config
+ BuildRequires: git
+-BuildRequires: PyYAML
+-BuildRequires: python-cheetah
++
++Provides: cobbler = <cobbler.version>
++Provides: config(cobbler) = <cobbler.version>
+ 
+ Requires: python >= 2.3
+ Requires: httpd
+@@ -27,7 +30,7 @@ Requires: mod_wsgi
+ Requires: createrepo
+ Requires: python-cheetah
+ Requires: python-netaddr
+-Requires: python-simplejson
++Requires: python27-python-simplejson
+ Requires: python-urlgrabber
+ Requires: PyYAML
+ Requires: rsync
+@@ -47,7 +50,7 @@ BuildRequires: python-setuptools
+ %if 0%{?fedora} >= 6 || 0%{?rhel} >= 5
+ Requires: yum-utils
+ %endif
+-%if 0%{?fedora} >= 16
++%if 0%{?fedora} >= 16 || 0%{?rhel} >= 6
+ BuildRequires: systemd-units
+ Requires(post): systemd-sysv
+ Requires(post): systemd-units
+@@ -61,6 +64,7 @@ Requires(preun): /sbin/service
+ 
+ %description
+ 
++Cobbler 2.4.2 repackaged by Ericsson from Cobbler source code.
+ Cobbler is a network install server.  Cobbler supports PXE,
+ virtualized installs, and re-installing existing Linux machines.  The
+ last two modes use a helper tool, 'koan', that integrates with
+@@ -95,10 +99,14 @@ mkdir -p $RPM_BUILD_ROOT/tftpboot/images
+ 
+ rm -f $RPM_BUILD_ROOT/etc/cobbler/cobblerd
+ 
+-%if 0%{?fedora} >= 16
++%if 0%{?fedora} >= 16 || 0%{?rhel} > 6
+ rm -rf $RPM_BUILD_ROOT/etc/init.d
+ mkdir -p $RPM_BUILD_ROOT%{_unitdir}
+ install -m0644 config/cobblerd.service $RPM_BUILD_ROOT%{_unitdir}
++rm -f $RPM_BUILD_ROOT/etc/cobbler/cobblerd.service
++mkdir -p $RPM_BUILD_ROOT%{_prefix}/local/bin/
++install -m0755 config/check_cobblerd_service.sh $RPM_BUILD_ROOT%{_prefix}/local/bin
++rm -f $RPM_BUILD_ROOT/etc/cobbler/check_cobblerd_service.sh
+ 
+ %post
+ if [ $1 -eq 1 ] ; then 
+@@ -149,6 +157,7 @@ fi
+ if [ $1 -ge 1 ] ; then
+     # Package upgrade, not uninstall
+     /bin/systemctl try-restart cobblerd.service >/dev/null 2>&1 || :
++    /bin/systemctl try-restart httpd.service >/dev/null 2>&1 || :
+ fi
+ 
+ %triggerun -- cobbler < 2.0.11-3
+@@ -233,8 +242,9 @@ test "x$RPM_BUILD_ROOT" != "x" && rm -rf
+ 
+ %config(noreplace) %{_sysconfdir}/cobbler
+ %config(noreplace) %{_sysconfdir}/logrotate.d/cobblerd
+-%if 0%{?fedora} >= 16
++%if 0%{?fedora} >= 16 || 0%{?rhel} > 6
+ %{_unitdir}/cobblerd.service
++%{_prefix}/local/bin/check_cobblerd_service.sh
+ %else
+ /etc/init.d/cobblerd
+ %endif
+@@ -255,7 +265,7 @@ test "x$RPM_BUILD_ROOT" != "x" && rm -rf
+ %exclude %{python_sitelib}/cobbler/sub_process.py*
+ %endif
+ %if 0%{?fedora} >= 9 || 0%{?rhel} > 5
+-%{python_sitelib}/cobbler*.egg-info
++%{python_sitelib}/EXTRlitpcobbler*.egg-info
+ /var/lib/tftpboot/images
+ %else
+ /tftpboot/images
+@@ -263,25 +273,27 @@ test "x$RPM_BUILD_ROOT" != "x" && rm -rf
+ 
+ %doc AUTHORS CHANGELOG README COPYING
+ 
+-%package -n koan
++%package -n EXTRlitpkoan_CXP9030602
+ 
+ Summary: Helper tool that performs cobbler orders on remote machines
+ Group: Applications/System
++Packager: %{packager}
+ Requires: python >= 2.0
++Provides: koan = <koan.version>
+ %if 0%{?fedora} >= 11 || 0%{?rhel} >= 6
+ Requires: python(abi) >= %{pyver}
+-Requires: python-simplejson
++Requires: python27-python-simplejson
+ Requires: virt-install
+ %endif
+ 
+ 
+-%description -n koan
++%description -n EXTRlitpkoan_CXP9030602
+ 
+ Koan stands for kickstart-over-a-network and allows for both
+ network installation of new virtualized guests and reinstallation
+ of an existing system.  For use with a boot-server configured with Cobbler
+ 
+-%files -n koan
++%files -n EXTRlitpkoan_CXP9030602
+ %defattr(-,root,root,-)
+ %dir /var/spool/koan
+ %dir /var/lib/koan/config

@@ -1,0 +1,14 @@
+--- cobblerd.service	2014-02-15 10:47:15.000000000 +0000
++++ cobblerd.service.new	2020-12-16 15:47:11.145806771 +0000
+@@ -4,7 +4,10 @@ After=syslog.target network.target
+ 
+ [Service]
+ ExecStart=/usr/bin/cobblerd -F
+-ExecStartPost=-/usr/bin/touch /usr/share/cobbler/web/cobbler.wsgi
++ExecStartPost=/bin/bash -c "if [ -f /usr/share/cobbler/web/cobbler.wsgi ]; then \
++   /usr/bin/touch /usr/share/cobbler/web/cobbler.wsgi; \
++fi"
++ExecStartPost=/usr/local/bin/check_cobblerd_service.sh
+ PrivateTmp=yes
+ KillMode=process
+ 

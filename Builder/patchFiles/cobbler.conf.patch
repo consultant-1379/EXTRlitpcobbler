@@ -1,0 +1,13 @@
+--- cobbler.conf.orig	2014-02-15 10:47:15.000000000 +0000
++++ cobbler.conf	2023-03-06 16:56:41.090714000 +0000
+@@ -17,8 +17,8 @@ WSGIScriptAliasMatch ^/cblr/svc/([^/]*)
+ 
+ ProxyRequests off
+ 
+-ProxyPass /cobbler_api http://localhost:25151/
+-ProxyPassReverse /cobbler_api http://localhost:25151/
++ProxyPass /cobbler_api http://127.0.0.1:25151/
++ProxyPassReverse /cobbler_api http://127.0.0.1:25151/
+ 
+ BrowserMatch "MSIE" AuthDigestEnableQueryStringHack=On
+ 

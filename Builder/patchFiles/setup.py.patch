@@ -1,0 +1,28 @@
+--- setup.py	2014-02-15 10:47:15.000000000 +0000
++++ setup.py.new	2014-03-06 15:41:23.552864459 +0000
+@@ -15,6 +15,7 @@
+     converage = None
+ 
+ VERSION = "2.4.2"
++VERSION_3PP = "<change_me>"
+ OUTPUT_DIR = "config"
+ 
+ 
+@@ -91,7 +92,7 @@
+        "gitdate" : gitdate,
+        "gitstamp"      : gitstamp,
+        "builddate"     : builddate,
+-       "version"       : VERSION,
++       "version"       : VERSION_3PP,
+        "version_tuple" : [ int(x) for x in VERSION.split(".")]
+     }
+     fd.write(yaml.dump(data))
+@@ -182,7 +183,7 @@
+ 
+     setup(
+         cmdclass={'build_py': build_py, 'test': test_command},
+-        name = "cobbler",
++        name = "EXTRlitpcobbler_CXP9030601",
+         version = VERSION,
+         description = "Network Boot and Update Server",
+         long_description = "Cobbler is a network install server.  Cobbler supports PXE, virtualized installs, and reinstalling existing Linux machines.  The last two modes use a helper tool, 'koan', that integrates with cobbler.  There is also a web interface 'cobbler-web'.  Cobbler's advanced features include importing distributions from DVDs and rsync mirrors, kickstart templating, integrated yum mirroring, and built-in DHCP/DNS Management.  Cobbler has a XMLRPC API for integration with other applications.",

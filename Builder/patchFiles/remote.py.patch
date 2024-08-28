@@ -1,0 +1,14 @@
+--- remote.py	2014-02-15 10:47:15.000000000 +0000
++++ remote.py.new	2020-12-01 16:33:09.041945930 +0000
+@@ -2106,9 +2106,9 @@ def _test_setup_settings(pxe_once=1):
+ 
+ def _test_bootstrap_restart():
+ 
+-   rc1 = utils.subprocess_call(None,"/sbin/service cobblerd restart",shell=False)
++   rc1 = utils.subprocess_call(None,"/bin/systemctl restart cobblerd.service",shell=False)
+    assert rc1 == 0
+-   rc2 = utils.subprocess.call(None,"/sbin/service httpd restart",shell=False)
++   rc2 = utils.subprocess.call(None,"/bin/systemctl restart httpd.service",shell=False)
+    assert rc2 == 0
+    time.sleep(5)
+    

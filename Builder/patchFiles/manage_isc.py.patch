@@ -1,0 +1,10 @@
+--- manage_isc.py	2021-11-25 13:58:52.997110273 +0000
++++ manage_isc.py.new	2021-11-25 13:44:19.814000000 +0000
+@@ -153,6 +153,7 @@ class IscManager:
+                 interface["hostname"] = blended_system["hostname"]
+                 interface["owner"] = blended_system["name"]
+                 interface["enable_gpxe"] = blended_system["enable_gpxe"]
++                interface["mgmt_parameters"] = blended_system["mgmt_parameters"]
+
+                 if not interface["netboot_enabled"] and interface['static']:
+                     continue

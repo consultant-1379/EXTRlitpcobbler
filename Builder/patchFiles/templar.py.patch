@@ -1,0 +1,11 @@
+--- cobbler-2.4.2/cobbler/templar.py	2014-02-15 10:47:15.000000000 +0000
++++ templar.py	2020-07-27 17:05:41.326665739 +0100
+@@ -34,7 +34,7 @@
+ 
+ import Cheetah
+ major, minor, release = Cheetah.Version.split('.')[0:3]
+-fix_cheetah_class = int(major) >= 2 and int(minor) >=4 and int(release) >= 2
++fix_cheetah_class = (int(major), int(minor), int(release)) >= (2, 4, 2)
+ 
+ jinja2_available = False
+ try: 
